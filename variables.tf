@@ -34,9 +34,9 @@ EOT
     developer_app_insights_key            = optional(string)
     display_name                          = optional(string)
     endpoint                              = optional(string)
-    icon_url                              = optional(string, "https://docs.botframework.com/static/devportal/client/images/bot-framework-default.png")
+    icon_url                              = optional(string) # Default: "https://docs.botframework.com/static/devportal/client/images/bot-framework-default.png"
     public_network_access_enabled         = optional(bool)
-    streaming_endpoint_enabled            = optional(bool, false)
+    streaming_endpoint_enabled            = optional(bool) # Default: false
     tags                                  = optional(map(string))
   }))
 }
