@@ -1,3 +1,7 @@
+output "bot_channels_registrations_id" {
+  description = "Map of id values across all bot_channels_registrations, keyed the same as var.bot_channels_registrations"
+  value       = { for k, v in azurerm_bot_channels_registration.bot_channels_registrations : k => v.id }
+}
 output "bot_channels_registrations_cmk_key_vault_url" {
   description = "Map of cmk_key_vault_url values across all bot_channels_registrations, keyed the same as var.bot_channels_registrations"
   value       = { for k, v in azurerm_bot_channels_registration.bot_channels_registrations : k => v.cmk_key_vault_url }
