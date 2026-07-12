@@ -11,6 +11,8 @@ Optional:
     - cmk_key_vault_url
     - description
     - developer_app_insights_api_key
+    - developer_app_insights_api_key_key_vault_id (alternative to developer_app_insights_api_key - read from Key Vault instead)
+    - developer_app_insights_api_key_key_vault_secret_name (alternative to developer_app_insights_api_key - read from Key Vault instead)
     - developer_app_insights_application_id
     - developer_app_insights_key
     - display_name
@@ -25,25 +27,27 @@ Optional:
 EOT
 
   type = map(object({
-    location                                = string
-    microsoft_app_id                        = string
-    name                                    = string
-    resource_group_name                     = string
-    sku                                     = string
-    public_network_access_enabled           = optional(bool)
-    microsoft_app_user_assigned_identity_id = optional(string)
-    microsoft_app_type                      = optional(string)
-    microsoft_app_tenant_id                 = optional(string)
-    icon_url                                = optional(string) # Default: "https://docs.botframework.com/static/devportal/client/images/bot-framework-default.png"
-    endpoint                                = optional(string)
-    developer_app_insights_key              = optional(string)
-    streaming_endpoint_enabled              = optional(bool) # Default: false
-    developer_app_insights_application_id   = optional(string)
-    developer_app_insights_api_key          = optional(string)
-    description                             = optional(string)
-    cmk_key_vault_url                       = optional(string)
-    display_name                            = optional(string)
-    tags                                    = optional(map(string))
+    location                                             = string
+    microsoft_app_id                                     = string
+    name                                                 = string
+    resource_group_name                                  = string
+    sku                                                  = string
+    public_network_access_enabled                        = optional(bool)
+    microsoft_app_user_assigned_identity_id              = optional(string)
+    microsoft_app_type                                   = optional(string)
+    microsoft_app_tenant_id                              = optional(string)
+    icon_url                                             = optional(string) # Default: "https://docs.botframework.com/static/devportal/client/images/bot-framework-default.png"
+    endpoint                                             = optional(string)
+    developer_app_insights_key                           = optional(string)
+    streaming_endpoint_enabled                           = optional(bool) # Default: false
+    developer_app_insights_application_id                = optional(string)
+    developer_app_insights_api_key                       = optional(string)
+    developer_app_insights_api_key_key_vault_id          = optional(string)
+    developer_app_insights_api_key_key_vault_secret_name = optional(string)
+    description                                          = optional(string)
+    cmk_key_vault_url                                    = optional(string)
+    display_name                                         = optional(string)
+    tags                                                 = optional(map(string))
   }))
   validation {
     condition = alltrue([
