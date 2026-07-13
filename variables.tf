@@ -36,10 +36,10 @@ EOT
     microsoft_app_user_assigned_identity_id              = optional(string)
     microsoft_app_type                                   = optional(string)
     microsoft_app_tenant_id                              = optional(string)
-    icon_url                                             = optional(string) # Default: "https://docs.botframework.com/static/devportal/client/images/bot-framework-default.png"
+    icon_url                                             = optional(string)
     endpoint                                             = optional(string)
     developer_app_insights_key                           = optional(string)
-    streaming_endpoint_enabled                           = optional(bool) # Default: false
+    streaming_endpoint_enabled                           = optional(bool)
     developer_app_insights_application_id                = optional(string)
     developer_app_insights_api_key                       = optional(string)
     developer_app_insights_api_key_key_vault_id          = optional(string)
@@ -49,74 +49,13 @@ EOT
     display_name                                         = optional(string)
     tags                                                 = optional(map(string))
   }))
-  validation {
-    condition = alltrue([
-      for k, v in var.bot_channels_registrations : (
-        length(v.name) > 0
-      )
-    ])
-    error_message = "must not be empty"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.bot_channels_registrations : (
-        can(regex("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$", v.microsoft_app_id))
-      )
-    ])
-    error_message = "must be a valid UUID"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.bot_channels_registrations : (
-        v.microsoft_app_tenant_id == null || (can(regex("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$", v.microsoft_app_tenant_id)))
-      )
-    ])
-    error_message = "must be a valid UUID"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.bot_channels_registrations : (
-        v.display_name == null || (length(v.display_name) > 0)
-      )
-    ])
-    error_message = "must not be empty"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.bot_channels_registrations : (
-        v.endpoint == null || (length(v.endpoint) > 0)
-      )
-    ])
-    error_message = "must not be empty"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.bot_channels_registrations : (
-        v.developer_app_insights_key == null || (can(regex("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$", v.developer_app_insights_key)))
-      )
-    ])
-    error_message = "must be a valid UUID"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.bot_channels_registrations : (
-        v.developer_app_insights_api_key == null || (length(v.developer_app_insights_api_key) > 0)
-      )
-    ])
-    error_message = "must not be empty"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.bot_channels_registrations : (
-        v.developer_app_insights_application_id == null || (length(v.developer_app_insights_application_id) > 0)
-      )
-    ])
-    error_message = "must not be empty"
-  }
   # --- Unconfirmed validation candidates, derived from azurerm_bot_channels_registration's provider source ---
   # Not auto-enabled: either a bespoke provider validator we can't safely translate,
   # or a path that crosses a list-typed block (needs its own for_each wrapping).
   # Review, translate into a real validation{} block above, and delete once confirmed.
+  # path: name
+  #   condition: length(value) > 0
+  #   message:   must not be empty
   # path: resource_group_name
   #   condition: length(value) <= 90
   #   message:   [from resourcegroups.ValidateName: invalid when len(value) > 90]
@@ -135,8 +74,14 @@ EOT
   #   source:    location.EnhancedValidate: no recognizable `if ... { errors = append(...) }` pattern - read it by hand
   # path: sku
   #   source:    validation.StringInSlice value list is not a literal []string - likely a generated PossibleValuesFor*() helper; resolve separately
+  # path: microsoft_app_id
+  #   condition: can(regex("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$", value))
+  #   message:   must be a valid UUID
   # path: microsoft_app_type
   #   source:    validation.StringInSlice value list is not a literal []string - likely a generated PossibleValuesFor*() helper; resolve separately
+  # path: microsoft_app_tenant_id
+  #   condition: can(regex("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$", value))
+  #   message:   must be a valid UUID
   # path: microsoft_app_user_assigned_identity_id
   #   source:    [from commonids.ValidateUserAssignedIdentityID] !ok
   # path: microsoft_app_user_assigned_identity_id
@@ -151,6 +96,21 @@ EOT
   #   condition: length(value) <= 512
   #   message:   [from validate.BotChannelRegistrationDescription: invalid when len(value) > 512]
   #   source:    [from validate.BotChannelRegistrationDescription: invalid when len(value) > 512]
+  # path: display_name
+  #   condition: length(value) > 0
+  #   message:   must not be empty
+  # path: endpoint
+  #   condition: length(value) > 0
+  #   message:   must not be empty
+  # path: developer_app_insights_key
+  #   condition: can(regex("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$", value))
+  #   message:   must be a valid UUID
+  # path: developer_app_insights_api_key
+  #   condition: length(value) > 0
+  #   message:   must not be empty
+  # path: developer_app_insights_application_id
+  #   condition: length(value) > 0
+  #   message:   must not be empty
   # path: icon_url
   #   source:    [from validate.BotChannelRegistrationIconUrl] !ok
   # path: icon_url
