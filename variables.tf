@@ -4,6 +4,7 @@ Map of bot_channels_registrations, attributes below
 Required:
     - location
     - microsoft_app_id
+    - microsoft_app_type
     - name
     - resource_group_name
     - sku
@@ -19,7 +20,6 @@ Optional:
     - endpoint
     - icon_url
     - microsoft_app_tenant_id
-    - microsoft_app_type
     - microsoft_app_user_assigned_identity_id
     - public_network_access_enabled
     - streaming_endpoint_enabled
@@ -29,18 +29,18 @@ EOT
   type = map(object({
     location                                             = string
     microsoft_app_id                                     = string
+    microsoft_app_type                                   = string
     name                                                 = string
     resource_group_name                                  = string
     sku                                                  = string
     public_network_access_enabled                        = optional(bool)
     microsoft_app_user_assigned_identity_id              = optional(string)
-    microsoft_app_type                                   = optional(string)
     microsoft_app_tenant_id                              = optional(string)
     icon_url                                             = optional(string)
     endpoint                                             = optional(string)
+    developer_app_insights_application_id                = optional(string)
     developer_app_insights_key                           = optional(string)
     streaming_endpoint_enabled                           = optional(bool)
-    developer_app_insights_application_id                = optional(string)
     developer_app_insights_api_key                       = optional(string)
     developer_app_insights_api_key_key_vault_id          = optional(string)
     developer_app_insights_api_key_key_vault_secret_name = optional(string)
